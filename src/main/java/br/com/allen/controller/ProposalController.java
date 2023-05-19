@@ -2,8 +2,8 @@ package br.com.allen.controller;
 
 import br.com.allen.dto.ProposalDetailsDTO;
 import br.com.allen.service.ProposalService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class ProposalController {
     public ProposalDetailsDTO findDetailsProposal(@PathParam("id") long id) {
         LOGGER.info("Requisição recebida para obter detalhes da proposta com ID: {}", id);
         ProposalDetailsDTO fullProposal = proposalService.findFullProposal(id);
-        LOGGER.info("Proposta encontrada , ID: {}", id);
+        LOGGER.info("Proposta encontrada, ID: {}", id);
         return fullProposal;
     }
 
@@ -41,6 +41,7 @@ public class ProposalController {
 
     @DELETE
     @Path("/{id}")
+    @Transactional
     public Response removeProposal(@PathParam("id") long id) {
         LOGGER.info("Requisição para remover proposta com ID: {}", id);
         try {

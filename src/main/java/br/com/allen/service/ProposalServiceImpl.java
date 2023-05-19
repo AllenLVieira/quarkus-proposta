@@ -5,12 +5,14 @@ import br.com.allen.dto.ProposalDetailsDTO;
 import br.com.allen.entity.ProposalEntity;
 import br.com.allen.message.KafkaEvents;
 import br.com.allen.repository.ProposalRepository;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
+@ApplicationScoped
 public class ProposalServiceImpl implements ProposalService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProposalServiceImpl.class);
@@ -26,7 +28,6 @@ public class ProposalServiceImpl implements ProposalService {
     @Override
     public ProposalDetailsDTO findFullProposal(long id) {
         ProposalEntity proposal = proposalRepository.findById(id);
-        LOGGER.info("Proposta encontrada com ID: {}", id);
         return mapToProposalDetailsDTO(proposal);
     }
 
@@ -45,7 +46,7 @@ public class ProposalServiceImpl implements ProposalService {
     }
 
     @Transactional
-    private ProposalDTO buildAndSaveNewProposal(ProposalDetailsDTO proposalDetailsDTO) {
+    public ProposalDTO buildAndSaveNewProposal(ProposalDetailsDTO proposalDetailsDTO) {
         try {
             ProposalEntity proposal = createProposalFromDetails(proposalDetailsDTO);
             proposalRepository.persist(proposal);
